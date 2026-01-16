@@ -8,6 +8,7 @@ A comprehensive MCP (Model Context Protocol) server for Elasticsearch with InfoS
 - **Search & Query**: Full-text search, ES|QL, aggregations
 - **Index Operations**: List, create, delete, mappings, settings
 - **Cluster Monitoring**: Health, stats, nodes, shards
+- **Cross-Platform**: Works on Windows, macOS, and Linux
 
 ## Quick Start
 
@@ -22,7 +23,14 @@ npm install
 Copy `.env.example` to `.env` and configure your Elasticsearch connection:
 
 ```bash
+# macOS/Linux
 cp .env.example .env
+
+# Windows (Command Prompt)
+copy .env.example .env
+
+# Windows (PowerShell)
+Copy-Item .env.example .env
 ```
 
 Edit `.env` with your credentials:
@@ -242,7 +250,9 @@ npm run dev
 
 ## Claude Desktop Integration
 
-Add to your Claude Desktop MCP configuration:
+### macOS / Linux
+
+Config location: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `~/.config/claude/claude_desktop_config.json` (Linux)
 
 ```json
 {
@@ -258,6 +268,30 @@ Add to your Claude Desktop MCP configuration:
   }
 }
 ```
+
+### Windows
+
+Config location: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "elastic": {
+      "command": "node",
+      "args": ["C:\\Users\\YourName\\elastic-mcp\\dist\\index.js"],
+      "env": {
+        "ELASTIC_URL": "https://your-deployment.es.region.azure.elastic-cloud.com",
+        "ELASTIC_API_KEY_ENCODED": "your-encoded-api-key"
+      }
+    }
+  }
+}
+```
+
+**Windows Notes:**
+- Use double backslashes (`\\`) in JSON paths, or forward slashes (`/`) which also work
+- Ensure Node.js is installed and available in your PATH
+- Run `npm install` and `npm run build` before first use
 
 ## Security Considerations
 

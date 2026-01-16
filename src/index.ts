@@ -61,10 +61,19 @@ class ElasticMCPServer {
       console.error('[MCP Error]', error);
     };
 
-    process.on('SIGINT', async () => {
+    // Graceful shutdown handling (cross-platform)
+    const shutdown = async () => {
       await this.server.close();
       process.exit(0);
-    });
+    };
+
+    process.on('SIGINT', shutdown);  // Ctrl+C on all platforms
+    process.on('SIGTERM', shutdown); // Termination signal (Unix)
+
+    // Windows-specific: handle Ctrl+Break and console close
+    if (process.platform === 'win32') {
+      process.on('SIGBREAK', shutdown);
+    }
   }
 
   /**
